@@ -43,12 +43,14 @@ return system_settings_form($form);
 	 // this content type has the annotation field attached to is using the
 	 // field_info_instance function. If it dos then we need to remove the
 	 // annotation field as the adnimistrator has unchecked the box.
+	 print_r($value);
 	 if (!$value){
 	   $instance = field_info_instance('node', 'annotation', $key);
 	   if (!empty($instance)){
 	     field_delete_instance($instance);
 		 watchdog("Annotation", 'Deleted annotation field from content type:
 		   %key', array('%key' => $key));
+
 	   }
 	 }
 	 else {
@@ -56,8 +58,9 @@ return system_settings_form($form);
 	   // the field is associated wiht that content type. If not then add the
 	   // annotation field to the content type.
 	   $instance = field_info_instance('node', 'annotation', $key);
+
 	   if (empty($instance)){
-	     $instance = array(
+		$instance = array(
 		   'field_name' => 'annotation',
 		   'entity_type' => 'node',
 		   'bundle' => $key,
@@ -73,6 +76,8 @@ return system_settings_form($form);
 			  ), 
 			),
 		 );
+		print("22222222");
+	    print_r($instance);
 	   $instance = field_create_instance($instance);
 	   watchdog ('Annotation', 'Added annotation field to content type: %key',
 	     array('%key' => $key));	

@@ -17,6 +17,7 @@ function annotate_install(){
 	  'entity_types' => array('node'),
 	  'translatable' => TRUE,
 	  );
+	  $field = field_create_field($field);
   }
 } 
 
@@ -46,19 +47,4 @@ function annotate_delete_annotation($type) {
   if($instance){
     field_delete_instance($instance);
   }
-}
-
-/**
- * Implements hook_node_load()
- */
-function annotate_node_load($nodes, $types){
-   global $user;
-   
-   // Check to see if the person viewing the node is the author. If not then
-   // hide the annotation.
-   foreach ($nodes as $node){
-     if ($user->uid != $node->uid){
-	   unset($node->annotation);
-	 }
-   }
 }
