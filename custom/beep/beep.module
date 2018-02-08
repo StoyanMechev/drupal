@@ -1,5 +1,5 @@
 <?php
-//**
+/**
  * @file
  * Provide a simulated beep.
  */
@@ -10,15 +10,78 @@ function beep_beep(){
 
 /**
  * Implementation of hook_user_login().
- */
+
 function beep_user(&$edit, $account) {
 	beep_beep();
 }
 
 /**
  * Implementation of hook_node_insert().
- */
+
  function beep_node_insert($node){
 	 beep_beep();
  }
+*/ 
+
+ /**
+  * Implementation of hook_action_info().
+  */
+function beep_action_info(){
+	return array(
+		'beep_beep_action' => array (
+			'type' => 'system',
+			'label' => t('Beep annoyingly'),
+			'configurable' => FALSE,
+			'triggers' => array('node_view', 'node_insert', 'node_update', 'node_delete'),
+		),
+		'beep_multiple_beep_action' => array(
+			'type' => 'system',
+			'label' => t('Beep multiple times'),
+			'configurable' => TRUE,
+			'triggers' => array('node_view', 'node_insert', 'node_update', 'node_delete'),
+		),
+	);
+} 
  
+ /**
+  * Simulate a beep. A Drupal action.
+  */
+  function beep_beep_action(){
+	  beep_beep();
+  }
+  
+  //------------------------------
+  /**
+ * Form for configure Drupal action to beep multiple times
+ */
+ function beep_multiple_beep_action_form($context){
+	$form['beeps'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Number of beeps'),
+		'#description' => t('Enter the number of times to beep when this action executes'),
+		'#default_value' => isset($context['beeps']) ? $context['beeps'] : '1',
+		'#requred' => TRUE,
+	);
+	return $form;	
+ }
+ 
+ function beep_multiple_beep_action_validate($form, $form_state){
+	$beeps = $form_state['values']['beeps'];
+	print_r($beeps);
+	if (!is_int($beeps)){
+		form_set_error('beeps', t('Please enter a whole number between 0 and 10.'));
+	}
+	else if((int)$beeps > 10){
+		form_set_error('beeps', t('That would be too annoying. Please choose fewer than 10 
+		beeps'));		
+	} else if ((int)$beeps <0){
+		form_set_error('beeps', t('That would likely create a black hole! Beeps must be a 
+		positive integer.'));
+	}
+ }
+ 
+ function beep_multiple_beep_action_submit($form, $form_state){
+	 return array(
+		'beeps' => (int)$form_state['values']['beeps']
+	 );
+ } 
