@@ -11,23 +11,6 @@
  /**
   * Implementation of hook_menu().
   */
-  /**
- function annotate_menu() {
-  $items['admin/config/annotate'] = array(
-   'title' => 'Node annotation',
-   'description' => 'Adjust node annotation options.',
-   'position' => 'right',
-   'weight' => -5,
-   'page callback' => 'drupal_get_form',
-   'page arguments' => array ('annotate_admin_settings'),
-   'access arguments' => array('administer site configuration'),
-   'type' => MENU_NORMAL_ITEM,
-   'file' => 'annotate.admin.inc',
-  );
-  
-  return $items;
- } 
- */
  
  function annotate_menu() {
   $items['admin/config/annotate'] = array(

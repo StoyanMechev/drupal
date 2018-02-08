@@ -28,11 +28,32 @@
   '#description' => t('A text field will be available on these content types to
     make user-specific notes.'),
   );
-
+ 
+  $form['annotate_deletion'] = array(
+   '#type' => 'radios',
+   '#title' => t('Annotations will be deleted'),
+   '#description' => t('Select a method for deleting annotations.'),
+   '#options' => array(
+	  t('Never'),
+	  t('Randomly'),
+	  t('After 30 days'),
+	  ),
+   '#default_value' => variable_get('annotate_deletion',0),
+  );
+ 
+  $form['annotate_limit_per_node'] = array(
+    '#type' => 'textfield',
+	'#title' => t('Annotations per node'),
+	'#description' => t('Enter the maximum number of annotations allowed per node (0 for no limit).'),
+	'#default_value' => variable_get('annotate_limit_per_node',1),
+	'#size' => 3,
+  );
+ 
 $form ['#submit'][] = 'annotate_admin_settings_submit';
 return system_settings_form($form);  
 }
- 
+
+
 /**
  * Process annotation settings submission.
  */
@@ -45,6 +66,7 @@ return system_settings_form($form);
 	 // annotation field as the adnimistrator has unchecked the box.
 	 print_r($value);
 	 if (!$value){
+		 print("111111111");
 	   $instance = field_info_instance('node', 'annotation', $key);
 	   if (!empty($instance)){
 	     field_delete_instance($instance);
@@ -85,3 +107,14 @@ return system_settings_form($form);
 	 }
    } // End foreach loop.
  }
+ 
+ /**
+ * Validate annotation settings submission.
+*/ 
+
+function annotate_admin_settings_validate($form, &$form_state){
+	$limit = $form_state['values']['annotate_limit_per_node'];
+	if(!is_numeric($limit)){
+		form_set_error('annotate_limit_per_node', t('Please enter number.'));
+	}
+}
