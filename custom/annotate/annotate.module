@@ -49,3 +49,26 @@ function annotate_node_load($nodes, $types){
 	 }
    }
 }
+
+/**
+ * Implementation of hook_tigger_info().
+ */
+ 
+ function annotate_trigger_info(){
+	 return array(
+		'annotate' => array(
+			'annotate_insert' => array(
+				'label' => t('After saving new annotations'),
+			),
+			'annotate_update' => array(
+				'label' => t('After saving updated annotations'),
+			),
+			'annotate_delete' => array(
+				'label' => t('After deleting annotations'),
+			),
+			'annotate_view' => array(
+				'label' => t('When annotation is viewed by an authenticated user'),
+			),
+		),	
+	 );
+ }
